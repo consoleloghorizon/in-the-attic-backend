@@ -1,10 +1,14 @@
 import { Player } from "./player";
 
 export class GameRoom {
-    constructor(gameID, maxPlayers) {
-        this.roomCode = gameID;
+    constructor(roomCode, maxPlayers) {
+        this.roomCode = roomCode;
         this.playerList = {};
         this.maxPlayers = maxPlayers;
+    }
+
+    getRoomCode() {
+        return this.roomCode;
     }
 
     usernameAvailable(username) {
