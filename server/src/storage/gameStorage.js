@@ -9,7 +9,7 @@ export class GameStorage {
 
     initializeGameRoom() {
         const newId = shortid.generate();
-        const newRoom = new GameRoom(newId);
+        const newRoom = new GameRoom(newId, this.maxPlayers);
         this.gameDictionary[newId] = newRoom;
 
         return newRoom;

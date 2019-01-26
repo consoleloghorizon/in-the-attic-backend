@@ -15,7 +15,7 @@
   "scripts": {
     "test": "test",
     "start": "npm run build && node lib/app.js",
-    "build": "babel --presets es2015 -d lib/ src"
+    "build": "babel --presets es2015 -d lib/ server/src"
   },
   "repository": {
     "type": "git",
