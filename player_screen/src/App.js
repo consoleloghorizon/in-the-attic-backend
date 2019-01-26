@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Login } from "./components/base/Login";
 import { Game } from './components/base/Game';
+import io from 'socket.io-client';
 
 class App extends Component {
   login(connectionInfo){
