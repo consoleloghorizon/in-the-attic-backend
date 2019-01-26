@@ -3,17 +3,17 @@ import { Login } from "./components/base/Login";
 import { Game } from './components/base/Game';
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      loggedIn: false,
-    }
+  login(connectionInfo){
+    this.setState({ connectionInfo });
   }
   render() {
-    console.log(this.state);
     return (
       <div className="App">
-        {this.state.loggedIn ? <Game /> : <Login />}
+        {this.state ? 
+          <Game connectionInfo={this.connectionInfo}/>
+          :
+          <Login login={(connectionInfo) => this.login(connectionInfo)}/>
+        }
       </div>
     );
   }

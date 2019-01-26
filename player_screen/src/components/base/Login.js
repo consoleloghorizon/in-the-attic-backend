@@ -7,7 +7,9 @@ export class Login extends React.Component {
     }
 
     enterRoom(info) {
-        console.log(info);
+        // Log in must be performed with server, if successful
+        // call this.props.login(<connectionInfo>);
+        this.props.login(info);
     }
 
     render(){
