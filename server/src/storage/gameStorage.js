@@ -2,8 +2,9 @@ import {GameRoom} from "../data/gameRoom";
 import shortid from 'shortid';
 
 export class GameStorage {
-    constructor() {
+    constructor(maxPlayers) {
         this.gameDictionary = {};
+        this.maxPlayers = maxPlayers;
     }
 
     initializeGameRoom() {
@@ -13,4 +14,20 @@ export class GameStorage {
 
         return newRoom;
     }
+
+    gameRoomExists(roomId) {
+        return this.gameDictionary.hasOwnProperty(roomId);
+    }
+
+    usernameAvailable(roomId, username) {
+        return this.gameDictionary[roomId].usernameAvailable(username);
+    }
+
+    spaceAvailable(roomId) {
+        return this.gameDictionary[roomId].spaceAvailable();
+    }
+
+    initPlayerInRoom(roomId, username) {
+        return this.gameDictionary[roomId].initPlayer(username);
+    }   
 }
