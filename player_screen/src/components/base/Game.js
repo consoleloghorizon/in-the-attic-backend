@@ -1,6 +1,5 @@
 import React from "react";
 import GameComponents from "../ingame";
-import { promises } from "fs";
 
 const ChoiceState = {
     type: "ChoicePhase",
@@ -42,18 +41,11 @@ export class Game extends React.Component {
         console.log(input);
     }
     FakeSocket(input){
-        return new Promise((res, rej) => {
-            setTimeout(() => {
-                console.log(input);
-                res({message: "successfull"})
-            }, 1000);
-        });
     }
 
     submitToSocket(input){
-        this.FakeSocket(input).then(answer => {
-            this.setState({game: 1});
-        })
+        this.FakeSocket(input);
+        this.setState({game: 1});
     }
 
     // submitAnswer(input){
