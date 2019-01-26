@@ -15,11 +15,21 @@ export class Game extends React.Component {
             game: 0,
         }
     }
+    socketInput(input){
+        console.log(input);
+    }
+
+    submitToSocket(input){
+        setTimeout(() => {
+            this.socketInput(input);
+            this.setState({ game: 1 });
+        }, 1000);
+    }
 
     getGameComponent(){
         switch(this.state.game){
             case 0:
-                return <GameComponents.Answer />;
+                return <GameComponents.Answer submitFunc={(str) => this.submitToSocket(str)}/>;
             case 1:
                 return <GameComponents.Selection />;
             default:
@@ -28,9 +38,6 @@ export class Game extends React.Component {
     }
 
     render() {
-        setTimeout(() => {
-            this.setState({ game: ((this.state.game + 1) % 3) })
-        }, 500);
         return (
             <div>
                 {this.getGameComponent()}
