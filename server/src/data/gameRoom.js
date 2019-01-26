@@ -7,6 +7,10 @@ export class GameRoom {
         this.maxPlayers = maxPlayers;
     }
 
+    getRoomCode() {
+        return this.roomCode;
+    }
+
     usernameAvailable(username) {
         let player;
         for (player in this.playerList) {
