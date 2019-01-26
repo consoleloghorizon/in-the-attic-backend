@@ -15,19 +15,19 @@ export class GameStorage {
         return newRoom;
     }
 
-    gameRoomExists(roomId) {
-        return this.gameDictionary.hasOwnProperty(roomId);
+    gameRoomExists(roomCode) {
+        return this.gameDictionary.hasOwnProperty(roomCode);
     }
 
-    usernameAvailable(roomId, username) {
-        return this.gameDictionary[roomId].usernameAvailable(username);
+    usernameAvailable(roomCode, username) {
+        return this.gameDictionary[roomCode].usernameAvailable(username);
     }
 
-    spaceAvailable(roomId) {
-        return this.gameDictionary[roomId].spaceAvailable();
+    spaceAvailable(roomCode) {
+        return this.gameDictionary[roomCode].spaceAvailable();
     }
 
-    initPlayerInRoom(roomId, username) {
-        return this.gameDictionary[roomId].initPlayer(username);
+    initPlayerInRoom(roomCode, username) {
+        return this.gameDictionary[roomCode].initPlayer(username);
     }   
 }
