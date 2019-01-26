@@ -4,18 +4,17 @@ import { Game } from './components/base/Game';
 import io from 'socket.io-client';
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      loggedIn: false,
-      // adminSocket: io.connect("http://localhost:3000")
-    }
+  login(connectionInfo){
+    this.setState({ connectionInfo });
   }
   render() {
-    console.log(this.state);
     return (
       <div className="App">
-        {this.state.loggedIn ? <Game /> : <Login />}
+        {this.state ? 
+          <Game connectionInfo={this.connectionInfo}/>
+          :
+          <Login login={(connectionInfo) => this.login(connectionInfo)}/>
+        }
       </div>
     );
   }
