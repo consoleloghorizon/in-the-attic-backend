@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Login } from "./components/base/Login";
 import { Game } from './components/base/Game';
-import io from 'socket.io-client';
+
+import { subscribeToPhaseChange, sendPhaseOver, joinGame } from '../../sockets/socketManager';
 
 class App extends Component {
   login(connectionInfo){
@@ -11,9 +12,16 @@ class App extends Component {
     return (
       <div className="App">
         {this.state ? 
-          <Game connectionInfo={this.connectionInfo}/>
+          <Game connectionInfo={this.connectionInfo} socketActions={{
+            subscribeToPhaseChange: subscribeToPhaseChange, 
+            sendPhaseOver: sendPhaseOver
+          }}/>
           :
-          <Login login={(connectionInfo) => this.login(connectionInfo)}/>
+          <Login login={(connectionInfo) => this.login(connectionInfo)} socketActions={{
+            subscribeToPhaseChange: subscribeToPhaseChange, 
+            sendPhaseOver: sendPhaseOver,
+            joinGame: joinGame
+          }}/>
         }
       </div>
     );

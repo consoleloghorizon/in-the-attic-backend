@@ -1,5 +1,7 @@
 import React from "react";
 import GameComponents from "../ingame";
+
+
 /**
  * Father Component of all of the game states. Connect socket to game and change this.state with information received from the server.
  * @property Socket Info to be called on constructor, connect this object with server game 
@@ -11,10 +13,17 @@ export class Game extends React.Component {
         // Connect to socket using props.connectionInfo
         // Or on component did mount?
 
-        this.state = {
-            game: 0,
-        }
+        this.props.socketActions.subscribeToPhaseChange((data) => this.setState({
+            responseTest: data,
+            game: 0
+        }));
+
+        // this.state = {
+        //     game: 0,
+        //     socket: props.socket
+        // }
     }
+
     socketInput(input){
         console.log(input);
     }
@@ -41,6 +50,9 @@ export class Game extends React.Component {
         return (
             <div>
                 {this.getGameComponent()}
+                <button onClick={this.props.socketActions.sendPhaseOver}>
+                    Test Sockets
+                </button>
             </div>
         );
     }

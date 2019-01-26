@@ -38,34 +38,34 @@ app.get('/login/:username/:gameCode', (req, res) => {
 const server = app.listen(APPLICATION_PORT, () => console.log(`In the Attic Server listening on port ${APPLICATION_PORT}`));
 const io = new Socket(server)
 
-io.on('connection', (socket) => {
-    socket.on('init game', data, () => {
+io.on('connection', (client) => {
+    client.on('init game', data, () => {
         io.socket.emit('start game', {status: true})
     });
 
-    socket.on('add host', data => {
-        socket.join(data.gameCode);
+    client.on('add host', data => {
+        client.join(data.gameCode);
     });
 
-    socket.on('join game', data => {
-        socket.join(data.gameCode);
+    client.on('join game', data => {
+        client.join(data.gameCode);
         gameDriver.initPlayerInRoom(data.gameCode, data.username);
         io.sockets.in(data.gameCode).emit('player joined game', data);
     });
 
-    socket.on('phase over', data=> {
-        io.sockets.in(data.gameCode).emit('phase over', data);
+    client.on('phase over', data=> {
+        io.sockets.in(data.gameCode).emit('phase over', "new phase coming soon");
     });
 
-    socket.on('phase start', data => {
+    client.on('phase start', data => {
         io.sockets.in(data.gameCode).emit('start phase', data);
     });
 
-    socket.on('response submission', data => {
+    client.on('response submission', data => {
         io.sockets.in(data.gameCode).emit('submission recieved');
     })
 
-    socket.on('disconnect', () => {
+    client.on('disconnect', () => {
         console.log("player has left the game");
     });
 });
