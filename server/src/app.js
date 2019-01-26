@@ -2,9 +2,12 @@ import { APPLICATION_PORT, HOST_APPLICATION_PATH, MAX_PLAYERS } from './util/con
 import Socket from 'socket.io';
 import express from 'express';
 import { GameStorage } from './storage/gameStorage';
+import cors from 'cors';
 
 const app = express();
 const gameDriver = new GameStorage(MAX_PLAYERS);
+
+app.use(cors())
 
 app.get('/', function(req, res){
     // res.sendFile(__dirname + '/templates/index.html');
@@ -39,7 +42,7 @@ const server = app.listen(APPLICATION_PORT, () => console.log(`In the Attic Serv
 const io = new Socket(server)
 
 io.on('connection', (client) => {
-    client.on('init game', data, () => {
+    client.on('init game', data => {
         io.socket.emit('start game', {status: true})
     });
 
@@ -53,8 +56,11 @@ io.on('connection', (client) => {
         io.sockets.in(data.gameCode).emit('player joined game', data);
     });
 
-    client.on('phase over', data=> {
-        io.sockets.in(data.gameCode).emit('phase over', "new phase coming soon");
+    client.on('phase over', data => {
+        console.log("I have been reached");
+        console.log("data", data.gameCode);
+        io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
+        io.sockets.emit('phase over', "new phase coming soon");
     });
 
     client.on('phase start', data => {

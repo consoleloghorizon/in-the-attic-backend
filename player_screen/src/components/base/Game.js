@@ -1,6 +1,8 @@
 import React from "react";
 import GameComponents from "../ingame";
 
+import { subscribeToPhaseChange, sendPhaseOver } from '../../sockets/socketManager';
+
 
 /**
  * Father Component of all of the game states. Connect socket to game and change this.state with information received from the server.
@@ -13,15 +15,18 @@ export class Game extends React.Component {
         // Connect to socket using props.connectionInfo
         // Or on component did mount?
 
-        this.props.socketActions.subscribeToPhaseChange((data) => this.setState({
-            responseTest: data,
-            game: 0
-        }));
+        subscribeToPhaseChange((data) => { 
+            
+            console.log("testing this", data);
+            this.setState({
+                responseTest: data,
+                game: 0
+            });
+    });
 
-        // this.state = {
-        //     game: 0,
-        //     socket: props.socket
-        // }
+        this.state = {
+            game: 0,
+        }
     }
 
     socketInput(input){
@@ -46,11 +51,15 @@ export class Game extends React.Component {
         }
     }
 
+    sendPhaseOver(){
+        sendPhaseOver("GY6BNr6oC")
+    }
+
     render() {
         return (
             <div>
                 {this.getGameComponent()}
-                <button onClick={this.props.socketActions.sendPhaseOver}>
+                <button onClick={this.sendPhaseOver.bind(this)}>
                     Test Sockets
                 </button>
             </div>

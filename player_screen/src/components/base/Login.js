@@ -9,7 +9,7 @@ export class Login extends React.Component {
     async enterRoom (info) {
         // Log in must be performed with server, if successful
         // call this.props.login(<connectionInfo>);
-        const test = await this.props.socketActions.joinGame(info.userName, info.roomCode);
+        // const test = await this.props.socketActions.joinGame(info.userName, info.roomCode);
         this.props.login(info);
     }
 
