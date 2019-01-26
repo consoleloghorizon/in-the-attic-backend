@@ -1,0 +1,24 @@
+{
+  "name": "in-the-attic-backend",
+  "version": "1.0.0",
+  "description": "Server for In The Attic",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/consoleloghorizon/in-the-attic-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/consoleloghorizon/in-the-attic-backend/issues"
+  },
+  "homepage": "https://github.com/consoleloghorizon/in-the-attic-backend#readme"
+}
