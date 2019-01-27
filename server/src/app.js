@@ -55,8 +55,7 @@ io.on('connection', (client) => {
 
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
-        io.sockets.emit('start game', {status: true});
-            
+        io.sockets.emit('game-status', {status: true});
     });
 
     client.on('add host', data => {

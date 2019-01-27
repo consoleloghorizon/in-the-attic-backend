@@ -2,8 +2,6 @@ import React from "react";
 
 export default class Wait extends React.Component {
     render () {
-        console.log("In waiting");
-        console.log(this.props);
         let content;
         if(!this.props.gameEnded){
             if(this.props.submissionAccepted){
@@ -12,7 +10,7 @@ export default class Wait extends React.Component {
                 );
             } else {
                 content = (
-                    <h2>If you are seeing this something has gone really wrong.</h2>
+                    <h2>Waiting for the next round to start!</h2>
                 );
             }
         } else {
