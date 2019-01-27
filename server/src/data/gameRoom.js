@@ -4,7 +4,7 @@ import { BUSY_STATUS, SETUP_STATUS, ACCEPTING_STATUS } from "../util/constants"
 import _ from "lodash";
 
 export class GameRoom {
-    constructor(roomCode, maxPlayers, hostSocketId) {
+    constructor(roomCode, maxPlayers) {
         this.roomCode = roomCode;
         this.playerList = {};
         this.maxPlayers = maxPlayers;
@@ -14,7 +14,7 @@ export class GameRoom {
         this.phaseInfo = {};
         this.currentAnswers = {};
         this.losingAnswers = {};
-        this.hostSocketId = hostSocketId;
+        this.hostSocketId = -1;
     }
 
     getRoomCode() {
@@ -35,6 +35,10 @@ export class GameRoom {
 
     getHost() {
         return this.hostSocketId;
+    }
+
+    setHost(hostSocketId) {
+        this.hostSocketId = hostSocketId;
     }
 
     getCurrentAnswers() {
