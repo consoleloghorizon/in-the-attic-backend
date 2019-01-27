@@ -41,7 +41,7 @@ export class GameRoom {
         return this.currentAnswers;
     }
 
-    addUsedPrompts(prompt) {
+    addUsedPrompt(prompt) {
         this.usedPrompts.push(prompt);
     }
 

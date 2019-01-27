@@ -21,8 +21,13 @@ export default class Socket{
         })
     }
 
-    sendInfo(info){
+    sendInfo(info, callBack){
         this.socket.emit('response submission', info);
+        this.socket.on('submission success', data=> callBack(data));
+    }
+
+    subscribeToPhaseStart(callback){
+        this.socket.on('start phase', data=>callback(data));
     }
 
     subscribeToPhaseChange = (callback) => {
