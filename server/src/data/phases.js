@@ -175,7 +175,7 @@ export class GarbageChoicePhase {
         const choices = garbageAnswers.map(answer => answer.text);
 
         return {
-            type: "choice",
+            type: "choice - garbage",
             list: choices,
             votes: 1
         };
