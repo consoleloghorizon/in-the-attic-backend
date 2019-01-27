@@ -25,8 +25,8 @@ export class RoundStorage {
         }
     }
 
-    acceptAnswer(gameRoom) {
-        return this.roundList[this.currentRound].phases[this.currentPhase]
+    acceptAnswer(gameRoom, playerSocketId, answer) {
+        return this.roundList[this.currentRound].phases[this.currentPhase].acceptAnswer(gameRoom, playerSocketId, answer);
     }
 
     getPhaseInfo(gameRoom) {

@@ -6,7 +6,6 @@ export class AnswerPhase {
     }
 
     getPhaseInfo(gameRoom) {
-        const playerList = gameRoom.getPlayerList();
         const usedPrompts = gameRoom.getUsedPrompts();
 
         const prompts = [{
@@ -35,8 +34,8 @@ export class AnswerPhase {
         };
     }
 
-    acceptAnswer(gameRoom, username, answer) {
-        gameRoom.addAnswerToList(username, answer);
+    acceptAnswer(gameRoom, playerSocketId, answer) {
+        gameRoom.addAnswerToList(playerSocketId, answer);
     }
 
     resolvePhase(gameRoom) {
@@ -49,20 +48,21 @@ export class ChoicePhase {
 
     }
 
-    getPhaseInfo(gameRoom, username) {
-        const players = Object.keys(gameRoom.getPlayerList).filter(player => player.getUsername() !== username);
+    getPhaseInfo(gameRoom, playerSocketId) {
+        const answers = gameRoom.getCurrentAnswers();
+        const answerKeys = Object.keys(gameRoom.getCurrentAnswers());
 
-        const choices = players.map(player => player.getAnswer());
+        const filteredAnswers = answerKeys.filter(answer => !answers[answer].submittedBy.includes(playerSocketId));
 
         return {
             type: "choice",
-            list: choices,
+            list: filteredAnswers,
             votes: 1
         };
     }
 
-    acceptAnswer(gameRoom, username, answer) {
-        gameRoom.chooseAnswerFromList(username, answer);
+    acceptAnswer(gameRoom, playerSocketId, answer) {
+        gameRoom.chooseAnswerFromList(playerSocketId, answer);
     }
 
     resolvePhase(gameRoom) {
@@ -75,9 +75,7 @@ export class VotePhase {
     }
 
     getPhaseInfo(gameRoom) {
-        const players = Object.keys(gameRoom.getPlayerList);
-
-        const choices = players.map(player => player.getAnswer());
+        const choices = Object.keys(gameRoom.getCurrentAnswers());
 
         return {
             type: "choice",
@@ -86,7 +84,7 @@ export class VotePhase {
         };
     }
 
-    acceptAnswer(gameRoom, username, answer) {
+    acceptAnswer(gameRoom, playerSocketId, answer) {
         gameRoom.voteForAnswer(answer);
     }
 
@@ -97,15 +95,15 @@ export class VotePhase {
         const losingAnswers = _.slice(answerList, itemsToKeep);
         gameRoom.addLosingAnswers(losingAnswers);
 
-        let answer, username;
+        let answer, playerSocketId;
         for (answer in winningAnswers) {
             const chosenByNumber = winningAnswers[answer].chosenBy.length;
-            for (username in winningAnswers[answer].submittedBy) {
-                gameRoom.awardPointsToPlayer(username, 1000 + chosenByNumber * 250);
+            for (playerSocketId in winningAnswers[answer].submittedBy) {
+                gameRoom.awardPointsToPlayer(playerSocketId, 1000 + chosenByNumber * 250);
             }
 
-            for (username in winningAnswers[answer].chosenBy) {
-                gameRoom.awardPointsToPlayer(username, 500);
+            for (playerSocketId in winningAnswers[answer].chosenBy) {
+                gameRoom.awardPointsToPlayer(playerSocketId, 500);
             }
         }
     }
@@ -117,12 +115,13 @@ export class ScorePhase {
     }
 
     getPhaseInfo(gameRoom) {
-        const players = Object.keys(gameRoom.getPlayerList);
+        const players = Object.keys(gameRoom.getPlayerList());
 
         const scores = players.map(player => {
+            const playerData = gameRoom.getPlayerList()[player];
             return {
-                username: player.getUsername(),
-                score: player.getScore()
+                username: playerData.getUsername(),
+                score: playerData.getScore()
             };
         });
 
@@ -144,12 +143,13 @@ export class ResultsPhase {
     }
 
     getPhaseInfo(gameRoom) {
-        const players = Object.keys(gameRoom.getPlayerList);
+        const players = Object.keys(gameRoom.getPlayerList());
 
         const scores = players.map(player => {
+            const playerData = gameRoom.getPlayerList()[player];
             return {
-                username: player.getUsername(),
-                score: player.getScore()
+                username: playerData.getUsername(),
+                score: playerData.getScore()
             };
         });
 
@@ -170,7 +170,7 @@ export class GarbageChoicePhase {
 
     }
 
-    getPhaseInfo(gameRoom, username) {
+    getPhaseInfo(gameRoom) {
         const garbageAnswers = gameRoom.getLosingAnswers();
         const choices = garbageAnswers.map(answer => answer.text);
 
@@ -181,8 +181,8 @@ export class GarbageChoicePhase {
         };
     }
 
-    acceptAnswer(gameRoom, username, answer) {
-        gameRoom.addAnswerToList(username, answer);
+    acceptAnswer(gameRoom, playerSocketId, answer) {
+        gameRoom.addAnswerToList(playerSocketId, answer);
     }
 
     resolvePhase(gameRoom) {

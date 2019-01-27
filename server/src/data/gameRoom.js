@@ -4,7 +4,7 @@ import { BUSY_STATUS, SETUP_STATUS, ACCEPTING_STATUS } from "../util/constants"
 import _ from "lodash";
 
 export class GameRoom {
-    constructor(roomCode, maxPlayers) {
+    constructor(roomCode, maxPlayers, hostSocketId) {
         this.roomCode = roomCode;
         this.playerList = {};
         this.maxPlayers = maxPlayers;
@@ -14,6 +14,7 @@ export class GameRoom {
         this.phaseInfo = {};
         this.currentAnswers = {};
         this.losingAnswers = {};
+        this.hostSocketId = hostSocketId;
     }
 
     getRoomCode() {
@@ -32,29 +33,37 @@ export class GameRoom {
         return this.losingAnswers;
     }
 
+    getHost() {
+        return this.hostSocketId;
+    }
+
+    getCurrentAnswers() {
+        return this.currentAnswers;
+    }
+
     addUsedPrompts(prompt) {
         this.usedPrompts.push(prompt);
     }
 
-    addAnswerToList(username, answer) {
+    addAnswerToList(playerSocketId, answer) {
         if (this.currentAnswers.hasOwnProperty(answer)) {
             const submittedBy = this.currentAnswers[answer].submittedBy;
-            this.currentAnswers[answer].submittedBy = _.concat(submittedBy, username);
+            this.currentAnswers[answer].submittedBy = _.concat(submittedBy, playerSocketId);
         }
         else {
             const submittedBy = [];
             this.currentAnswers[answer] = {
                 text: answer,
-                submittedBy: _.concat(submittedBy, username),
+                submittedBy: _.concat(submittedBy, playerSocketId),
                 chosenBy: [],
                 votes: 0
             };
         }
     }
 
-    chooseAnswerFromList(username, answer) {
+    chooseAnswerFromList(playerSocketId, answer) {
         const chosenBy = this.currentAnswers[answer].chosenBy;
-        this.currentAnswers[answer].chosenBy = _.concat(chosenBy, username);
+        this.currentAnswers[answer].chosenBy = _.concat(chosenBy, playerSocketId);
     }
 
     voteForAnswer(answer) {
@@ -67,8 +76,8 @@ export class GameRoom {
         return answers;
     }
 
-    awardPointsToPlayer(username, points) {
-        this.playerList[username].addPoints(points);
+    awardPointsToPlayer(playerSocketId, points) {
+        this.playerList[playerSocketId].addPoints(points);
     }
 
     addLosingAnswers(losingAnswers) {
@@ -106,7 +115,7 @@ export class GameRoom {
 
     initPlayer(username, socketId) {
         const newPlayer = new Player(username, socketId, Object.keys(this.playerList).length === 0);
-        this.playerList[username] = newPlayer;
+        this.playerList[socketId] = newPlayer;
         return newPlayer;
     }
 
@@ -122,8 +131,8 @@ export class GameRoom {
         }
     }
 
-    acceptAnswer(username, answer) {
-        this.rounds.acceptAnswer(this, username, answer);
+    acceptAnswer(playerSocketId, answer) {
+        this.rounds.acceptAnswer(this, playerSocketId, answer);
     }
 
     stopAcceptingAnswers() {

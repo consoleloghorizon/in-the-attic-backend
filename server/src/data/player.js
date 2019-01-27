@@ -25,4 +25,8 @@ export class Player {
     addPoints(points) {
         this.score += points; 
     }
+
+    getSocketId() {
+        return this.socketId;
+    }
 }
