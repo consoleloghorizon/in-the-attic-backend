@@ -3,6 +3,7 @@ import Socket from 'socket.io';
 import express from 'express';
 import { GameStorage } from './storage/gameStorage';
 import cors from 'cors';
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -10,9 +11,10 @@ const gameDriver = new GameStorage(MAX_PLAYERS);
 
 app.use(cors())
 
-app.get('/', function(req, res){
-    // res.sendFile(__dirname + '/templates/index.html');
-    res.send('Holding Space');
+app.use(express.static(path.join(__dirname, '/templates/build')))
+
+app.get('/', (req,res) =>{
+    res.sendFile(path.join(__dirname+'/templates/build/index.html'));
 });
 
 app.get('/start', (req, res) => {
@@ -50,6 +52,7 @@ const server = app.listen(APPLICATION_PORT, () => console.log(`In the Attic Serv
 const io = new Socket(server)
 
 io.on('connection', (client) => {
+
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
         io.socket.emit('start game', {status: true})
@@ -62,7 +65,8 @@ io.on('connection', (client) => {
     client.on('join game', data => {
         console.log(data);
         client.join(data.gameCode);
-        const player = gameDriver.initPlayerInRoom(data.gameCode, data.username);
+        const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
+        console.log(client.id);
         console.log(player);
         client.emit('player joined game', {isVIP: player.isVIP});
     });
@@ -71,7 +75,6 @@ io.on('connection', (client) => {
         console.log("I have been reached");
         console.log("data", data.gameCode);
         io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
-        io.sockets.emit('phase over', "new phase coming soon");
     });
 
     client.on('start timer', data => {
