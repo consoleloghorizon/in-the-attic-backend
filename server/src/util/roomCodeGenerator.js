@@ -5,8 +5,8 @@ export const generateRoomCode = (codeLength) => {
     let roomCode = '';
     let i;
     for(i = 0; i < codeLength; i++) {
-        const nextChar = availableCharacters[_.random(0, availableCharacters.length - 1), false];
-        roomCode = roomCode.concat(roomCode, nextChar);
+        const nextChar = availableCharacters[_.random(0, availableCharacters.length - 1, false)];
+        roomCode = roomCode + nextChar;
     }
 
     return roomCode;
