@@ -48,6 +48,7 @@ export class Game extends React.Component {
             gameEnded: false,
             phaseInfo: null,
             error: null,
+            submissionAccepted: false,
         }
     }
 
@@ -55,7 +56,7 @@ export class Game extends React.Component {
         this.socket.sendInfo(
             {gameCode: this.props.connectionInfo.roomCode, answer: ans},
             data => {
-                if(data.isTrue) this.setState({phaseInfo: null, error: null});
+                if(data.isTrue) this.setState({phaseInfo: null, error: null, submissionAccepted: true});
                 else this.setState({error: data.error})
             }
         )
@@ -66,6 +67,7 @@ export class Game extends React.Component {
             return (
                 <GameComponents.MainLobby
                     isVIP={this.state.isVIP}
+                    userName={this.props.connectionInfo.userName}
                     startGame={() => this.socket.startGame(this.props.connectionInfo.roomCode)}
                 />
             );

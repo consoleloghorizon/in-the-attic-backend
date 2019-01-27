@@ -12,7 +12,7 @@ export default class extends React.Component {
         const { error } = this.props;
         return (
             <div className="answer-phase">
-                <h1>Save one thing from the {prompt}! ({subpromt})</h1>
+                <h1>Save one thing from the {main}! ({sub})</h1>
                 <div className="answer-input-container">
                     <input className="answer-input" onChange={(e) => this.answer = e.target.value} />
                 </div>
