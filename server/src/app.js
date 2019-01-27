@@ -52,7 +52,7 @@ const io = new Socket(server)
 io.on('connection', (client) => {
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
-        io.socket.emit('start game', {status: true})
+        io.sockets.emit('start game', {status: true})
     });
 
     client.on('add host', data => {
