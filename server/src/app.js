@@ -84,9 +84,13 @@ io.on('connection', (client) => {
     });
 
     client.on('start timer', data => {
-        const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
         gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-        io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+        const players = gameDriver.getPlayerList();
+
+        Object.keys(players).forEach(playerKey => {
+            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo(playerKey);
+            io.sockets.to(playerKey).emit('start phase', { phaseInfo });
+        });
     });
 
     client.on('response submission', data => {
