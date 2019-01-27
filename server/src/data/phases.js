@@ -78,7 +78,7 @@ export class VotePhase {
         const choices = Object.keys(gameRoom.getCurrentAnswers());
 
         return {
-            type: "choice",
+            type: "votes",
             list: choices,
             votes: 3
         };

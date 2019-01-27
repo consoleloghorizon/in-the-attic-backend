@@ -34,34 +34,47 @@ export class Game extends React.Component {
         this.socket = new Sock(props.connectionInfo.userName, props.connectionInfo.roomCode);
         this.socket.joinGame(data => {
             this.setState({ isVIP: data.isVIP });
-        })
+        });
+        this.socket.gameIsStarting(data => {
+            this.setState({ gameIsActive: data.status });
+        });
         this.state = {
-
+            isVIP: false,
+            gameIsActive: false,
+            gameEnded: false,
+            phaseInfo: null,
         }
-    }
-    socketInput(input){
-    }
-
-    submitToSocket(input){
-        this.FakeSocket(input);
-        this.setState({game: 1});
     }
 
     getGameComponent(){
-        switch(this.state.game){
-            case 0:
-                return <GameComponents.Answer 
-                    submitFunc= {(str) => this.submitToSocket(str)}
-                />;
-            case 1:
-                return <GameComponents.Selection
-                    submitFunc={(str) => this.submitToSocket(str)}
-                    type={VotePhaseState.type}
-                    choices={VotePhaseState.choices.list}
-                />;
-            default:
-                return <GameComponents.MainLobby isVIP={this.state.isVIP} />;
+        if (!this.state.gameIsActive) {
+            return (
+                <GameComponents.MainLobby
+                    isVIP={this.state.isVIP}
+                    startGame={() => this.socket.startGame(this.props.connectionInfo.roomCode)}
+                />
+            );
         }
+        if (!this.state.phaseInfo) {
+            return (
+                <GameComponents.Wait
+                    isVIP={this.state.isVIP}
+                    gameEnded={this.state.gameEnded}
+                    playAgain={() => console.log("VIP says play again,", this.state.roomCode)}
+                    endServer={() => console.log("VIP says disband", this.state.roomCode)}
+                />
+            );
+        }
+        if (this.state.phaseInfo.type === "answer") {
+            return (<GameComponents.Answer 
+                submitFunc= {(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
+            />);
+        }
+        return (<GameComponents.Selection
+            submitFunc={(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
+            type={VotePhaseState.type}
+            choices={VotePhaseState.choices.list}
+        />);
     }
 
     render() {
