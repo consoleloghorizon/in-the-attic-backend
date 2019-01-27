@@ -65,6 +65,7 @@ io.on('connection', (client) => {
     });
 
     client.on('add host', data => {
+        gameDriver.getRoom(data.gameCode).setHost(client.id);
         client.join(data.gameCode);
     });
 
@@ -74,6 +75,8 @@ io.on('connection', (client) => {
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
         client.emit('player joined game', {isVIP: player.isVIP});
+        const host = gameDriver.getRoom(data.gameCode).getHost();
+        io.sockets.to(host).emit('player joined game');
     });
 
     client.on('phase over', data => {
@@ -90,7 +93,9 @@ io.on('connection', (client) => {
         console.log(data);
         try {
             gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer);
-            client.emit('submission success', { isTrue: true });
+            // client.emit('submission success', { isTrue: true });
+            const host = gameDriver.getRoom(data.gameCode).getHost();
+            io.sockets.to(host).to(client.id).emit('submission success', {isTrue: true});
 
             // Added for debugging purposes, TAKE OUT
             gameDriver.getRoom(data.gameCode).resolvePhase();

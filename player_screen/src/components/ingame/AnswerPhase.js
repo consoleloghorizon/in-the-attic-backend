@@ -18,6 +18,7 @@ export default class extends React.Component {
                 </div>
                 <button className="submit-btn" onClick={() => this.submitAnswer()}>Save it!</button>
                 { error ? <p>{error}</p> : undefined }
+                <div className="spacer"/>
             </div>
         );
     }
