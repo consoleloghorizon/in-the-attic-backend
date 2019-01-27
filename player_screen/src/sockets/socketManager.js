@@ -15,8 +15,8 @@ export default class Socket{
         this.socket.emit('init game', {gameCode: roomCode});
     }
 
-    gameIsStarting(callback){
-        this.socket.on('start game', data => {
+    gameStatusChange(callback){
+        this.socket.on('game-status', data => {
             callback(data);
         })
     }
