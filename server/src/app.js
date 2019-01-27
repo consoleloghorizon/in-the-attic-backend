@@ -55,7 +55,7 @@ io.on('connection', (client) => {
 
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
-        io.socket.emit('start game', {status: true})
+        io.sockets.emit('start game', {status: true})
     });
 
     client.on('add host', data => {
@@ -63,7 +63,6 @@ io.on('connection', (client) => {
     });
 
     client.on('join game', data => {
-        console.log(data);
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
         console.log(client.id);
@@ -72,8 +71,6 @@ io.on('connection', (client) => {
     });
 
     client.on('phase over', data => {
-        console.log("I have been reached");
-        console.log("data", data.gameCode);
         io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
     });
 
