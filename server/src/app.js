@@ -55,7 +55,12 @@ io.on('connection', (client) => {
 
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
+<<<<<<< HEAD
         io.sockets.emit('game-status', {status: true});
+=======
+        io.sockets.emit('start game', {status: true});
+            
+>>>>>>> e6a15490bc6b87951754cc6ccc91903d585b90e8
     });
 
     client.on('add host', data => {
@@ -74,13 +79,19 @@ io.on('connection', (client) => {
     });
 
     client.on('phase over', data => {
+        gameDriver.getRoom(data.gameCode).stopAcceptingAnswers();
+        gameDriver.getRoom(data.gameCode).resolvePhase();
         io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
     });
 
     client.on('start timer', data => {
-        const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
         gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-        io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+        const players = gameDriver.getPlayerList();
+
+        Object.keys(players).forEach(playerKey => {
+            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo(playerKey);
+            io.sockets.to(playerKey).emit('start phase', { phaseInfo });
+        });
     });
 
     client.on('response submission', data => {
@@ -90,6 +101,7 @@ io.on('connection', (client) => {
             client.emit('submission success', { isTrue: true });
             const host = gameDriver.getRoom(data.gameCode).getHost();
             const player = gameDriver.getPlayerList()[client.id];
+<<<<<<< HEAD
             io.sockets.to(host).emit('submission success', {isTrue: true, Player: player});
 
             // Added for debugging purposes, TAKE OUT
@@ -98,6 +110,10 @@ io.on('connection', (client) => {
             const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
             gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
             io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+=======
+            io.sockets.to(host).emit('submission success', {isTrue: true, player});
+
+>>>>>>> e6a15490bc6b87951754cc6ccc91903d585b90e8
         } catch (error) {
             client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
         }
