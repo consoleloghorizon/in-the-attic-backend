@@ -5,6 +5,6 @@ export class Player {
     }
 
     getUsername() {
-        return username;
+        return this.username;
     }
 }

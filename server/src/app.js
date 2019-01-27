@@ -2,8 +2,10 @@ import { APPLICATION_PORT, HOST_APPLICATION_PATH, MAX_PLAYERS } from './util/con
 import Socket from 'socket.io';
 import express from 'express';
 import { GameStorage } from './storage/gameStorage';
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 const gameDriver = new GameStorage(MAX_PLAYERS);
 
 app.get('/', function(req, res){
@@ -22,24 +24,22 @@ app.get('/start', (req, res) => {
 app.get('/login/:username/:gameCode', (req, res) => {
     const { username, gameCode } = req.params;
     if (gameDriver.gameRoomExists(gameCode)){
-        if (gameDriver.spaceAvailable(gameCode) && gameDriver.usernameAvailable(gameCode, username)) {
-            return res.status(200).json({status: "success"});
-        } else if (!gameDriver.spaceAvailable(gameCode)) {
-            return res.status(200).json({status: "no space available"});
-        } else {
-            return res.status(200).json({status: "invalid username"});
+        if (gameDriver.spaceAvailable(gameCode)){
+            if(gameDriver.usernameAvailable(gameCode, username)) {
+                return res.status(200).json({status: "success"});
+            }
+            return res.status(300).json({status: "Username used."}); 
         }
+        return res.status(300).json({status: "Room is full."});
     }
-    else {
-        return res.status(200).json({status: "invalid roomcode"});
-    } 
+    return res.status(404).json({status: "Room not found."});
 });
 
 const server = app.listen(APPLICATION_PORT, () => console.log(`In the Attic Server listening on port ${APPLICATION_PORT}`));
 const io = new Socket(server)
 
 io.on('connection', (socket) => {
-    socket.on('init game', data, () => {
+    socket.on('init game', (data) => {
         io.socket.emit('start game', {status: true})
     });
 
