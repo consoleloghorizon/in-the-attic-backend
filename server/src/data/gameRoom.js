@@ -89,6 +89,15 @@ export class GameRoom {
         return Object.keys(this.playerList).length < this.maxPlayers;
     }
 
+    /*
+        HEY CODE FRIENDS
+        Below this point are the endpoint methods that you should use!
+        I know there are some methods above this point that seem like the things you might want.
+        But I assure you, that is false!
+        That is only because the hour is late, my architecture is sloppy, and my life choices regrettable.
+        Oh, and the getters at the top of the file are fine to use. 
+    */
+
     initPlayer(username) {
         const newPlayer = new Player(username, Object.keys(this.playerList).length === 0);
         this.playerList[username] = newPlayer;
