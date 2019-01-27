@@ -30,10 +30,9 @@ export default class Socket{
         this.socket.on('start phase', data=>callback(data));
     }
 
-    subscribeToPhaseChange = (callback) => {
+    subscribeToPhaseOver = (callback) => {
         this.socket.on('phase over', data => {
-            console.log('phase game data', data);
-            callback(data);
+            callback();
         });
     };
 

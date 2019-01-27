@@ -58,6 +58,7 @@ io.on('connection', (client) => {
         io.sockets.emit('start game', {status: true});
             
         // Added for debugging purposes, TAKE OUT
+        // If not game will start on VIP's startgame function
         gameDriver.getRoom(data.gameCode).startPhase();
         const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
         gameDriver.getRoom(data.gameCode).startAcceptingAnswers();

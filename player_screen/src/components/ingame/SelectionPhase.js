@@ -1,11 +1,26 @@
 import React from "react";
 
 export default class extends React.Component {
-    state = { answered: [] };
+    constructor(props){
+        super(props);
+        this.state = { answered: [], disabled: false, tempError: null }; 
+    }
 
-    submitAnswer(option){
-        this.setState = { answered: this.state.answered.push(option) };
-        this.props.submitFunc(option);
+    submitAnswers(){
+        this.props.submitFunc(this.state.answered);
+    }
+
+    selectAnswer(option){
+        let temp = this.state.answered;
+        var index = temp.indexOf(option);
+        if (index !== -1) {
+            temp.splice(index, 1);
+            this.setState({answered: temp, tempError: null});
+        }else if (temp.length < this.props.voteNum){
+            this.setState({answered: [...temp, option], tempError: null})
+        } else {
+            this.setState({tempError: "Please deselect something"});
+        }
     }
 
     createOptions(list){
@@ -14,9 +29,13 @@ export default class extends React.Component {
                 {list.map((option) => {
                     return <p key={option}>
                         <button 
-                            disabled={this.state.answered.includes(option)}
-                            onClick={() => this.submitAnswer(option)}
-                            className="choice-btn"
+                            disabled={this.state.disabled}
+                            onClick={() => this.selectAnswer(option)}
+                            className={!this.state.answered.includes(option) ?
+                                "choice-btn"
+                                :
+                                "choice-btn selected"
+                            }
                         >
                         {option}
                         </button></p>
@@ -44,6 +63,9 @@ export default class extends React.Component {
             <div>
                 <h1 className="phase-title">{phaseTitle}</h1>
                 {this.createOptions(this.props.choices)}
+                <button onClick={() => this.submitAnswers()}>Submit answers!</button>
+                {this.state.tempError ? <p>{this.state.tempError}</p> : undefined}
+                {this.props.error ? <p>{this.props.error}</p> : undefined}
                 <div className="spacer"/>
             </div>
         );
