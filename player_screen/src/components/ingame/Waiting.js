@@ -2,22 +2,38 @@ import React from "react";
 
 export default class Wait extends React.Component {
     render () {
-        if (this.props.isVIP) {
-            if (this.props.end) {
-                return (
-                <div className="waiting-vip-end">
-                    <button className="vip-options" onClick={() => this.props.playAgain()}>Play again with the same players!</button>
-                    <button className="vip-options" onClick={() => this.props.endServer()}>Disband army of movers</button>
-                    <div className="spacer"/>
-                </div>
+        console.log("In waiting");
+        console.log(this.props);
+        let content;
+        if(!this.props.gameEnded){
+            if(this.props.submissionAccepted){
+                content = (
+                    <h2>Submission accepted! Waiting on other players.</h2>
+                );
+            } else {
+                content = (
+                    <h2>If you are seeing this something has gone really wrong.</h2>
+                );
+            }
+        } else {
+            if(this.props.isVIP && this.props.end){
+                content = (
+                    <div className="waiting-vip-end">
+                        <button className="vip-options" onClick={() => this.props.playAgain()}>Play again with the same players!</button>
+                        <button className="vip-options" onClick={() => this.props.endServer()}>Disband the army of movers.</button>
+                        <div className="spacer"/>
+                    </div>
+                );
+            } else {
+                content = (
+                    <h2 className="waiting-prompt">Waiting for the VIP to start or end the game.</h2>
                 );
             }
         }
         return (
             <div>
-                <p className="waiting-next"><h2>Waiting on the next round!</h2></p>      
-                <div className="spacer"/>
-            </div>     
+                {content} 
+            </div>
         );
     }
 }
