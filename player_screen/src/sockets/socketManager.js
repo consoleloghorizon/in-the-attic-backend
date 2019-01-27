@@ -21,6 +21,10 @@ export default class Socket{
         })
     }
 
+    sendInfo(info){
+        this.socket.emit('response submission', info);
+    }
+
     subscribeToPhaseChange = (callback) => {
         this.socket.on('phase over', data => {
             console.log('phase game data', data);

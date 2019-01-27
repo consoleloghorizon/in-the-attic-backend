@@ -45,13 +45,6 @@ export class Game extends React.Component {
             phaseInfo: null,
         }
     }
-    socketInput(input){
-    }
-
-    submitToSocket(input){
-        this.FakeSocket(input);
-        this.setState({game: 1});
-    }
 
     getGameComponent(){
         if (!this.state.gameIsActive) {
@@ -70,20 +63,18 @@ export class Game extends React.Component {
                     playAgain={() => console.log("VIP says play again,", this.state.roomCode)}
                     endServer={() => console.log("VIP says disband", this.state.roomCode)}
                 />
-            )
+            );
         }
-        // switch(){
-        //     case 0:
-        //         return <GameComponents.Answer 
-        //             submitFunc= {(str) => this.submitToSocket(str)}
-        //         />;
-        //     case 1:
-        //         return <GameComponents.Selection
-        //             submitFunc={(str) => this.submitToSocket(str)}
-        //             type={VotePhaseState.type}
-        //             choices={VotePhaseState.choices.list}
-        //         />;
-        // }
+        if (this.state.phaseInfo.type === "answer") {
+            return (<GameComponents.Answer 
+                submitFunc= {(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
+            />);
+        }
+        return (<GameComponents.Selection
+            submitFunc={(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
+            type={VotePhaseState.type}
+            choices={VotePhaseState.choices.list}
+        />);
     }
 
     render() {

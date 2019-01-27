@@ -64,13 +64,9 @@ io.on('connection', (client) => {
 
     client.on('join game', data => {
         client.join(data.gameCode);
-<<<<<<< HEAD
-        const player = gameDriver.initPlayerInRoom(data.gameCode, data.username);
-=======
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
         console.log(client.id);
         console.log(player);
->>>>>>> d3a8ce2399b63841154abd0e4df5944888dd84fd
         client.emit('player joined game', {isVIP: player.isVIP});
     });
 
