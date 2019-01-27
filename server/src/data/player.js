@@ -17,6 +17,10 @@ export class Player {
         return this.score;
     }
 
+    isVIP() {
+        return this.isVIP;
+    }
+
     addPoints(points) {
         this.score += points; 
     }

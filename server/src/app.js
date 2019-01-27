@@ -38,11 +38,21 @@ app.get('/login/:username/:gameCode', (req, res) => {
     } 
 });
 
+app.get('/startphase/:gameCode', (req, res) => {
+    const { gameCode } = req.params;
+
+    gameDriver.getRoom(data.gameCode).startPhase();
+    const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+
+    return res.status(200).json({ phaseInfo: phaseInfo });
+});
+
 const server = app.listen(APPLICATION_PORT, () => console.log(`In the Attic Server listening on port ${APPLICATION_PORT}`));
 const io = new Socket(server)
 
 io.on('connection', (client) => {
     client.on('init game', data => {
+        gameDriver.getRoom(data.gameCode).startGame();
         io.socket.emit('start game', {status: true})
     });
 
@@ -52,8 +62,8 @@ io.on('connection', (client) => {
 
     client.on('join game', data => {
         client.join(data.gameCode);
-        gameDriver.initPlayerInRoom(data.gameCode, data.username);
-        io.sockets.in(data.gameCode).emit('player joined game', data);
+        const player = gameDriver.initPlayerInRoom(data.gameCode, data.username);
+        io.sockets.in(data.gameCode).emit('player joined game', {isVIP: player.isVIP()});
     });
 
     client.on('phase over', data => {
@@ -63,11 +73,14 @@ io.on('connection', (client) => {
         io.sockets.emit('phase over', "new phase coming soon");
     });
 
-    client.on('phase start', data => {
-        io.sockets.in(data.gameCode).emit('start phase', data);
+    client.on('start timer', data => {
+        const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+        gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+        io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
     });
 
     client.on('response submission', data => {
+        gameDriver.getRoom(data.gameCode).acceptAnswer(data.username, data.answer)
         io.sockets.in(data.gameCode).emit('submission recieved');
     })
 
