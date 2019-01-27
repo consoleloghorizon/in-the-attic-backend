@@ -25,9 +25,20 @@ export default class extends React.Component {
     }
 
     render() {
-        const phaseTitle = this.props.type === "ChoicePhase" ?
-            "What other thing do you want to save?" : 
-            "What do you want to throw out?";
+        let phaseTitle;
+        switch(this.props.type){
+            case "choice": 
+                phaseTitle = "What else do you want to save?";
+                break;
+            case "votes":
+                phaseTitle = "What's your least favourite?";
+                break;
+            case "choice - garbage":
+                phaseTitle = "Save it from the dump!";
+                break;
+            default:
+                phaseTitle = "Something is wrong Timy!"
+        }
         return (
             <div>
                 <h1>{phaseTitle}</h1>

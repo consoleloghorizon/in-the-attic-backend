@@ -1,0 +1,46 @@
+.welcome {
+    display: flex;
+    justify-content: center;
+}
+
+.login-label {
+    margin-right: 1em;
+}
+
+.enter-game {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2em;
+}
+
+.login-table {
+    border-collapse: separate;
+    border-spacing: 0 1.3em;
+}
+
+.join {
+    margin-top: 1%;
+}
+
+.username {
+    height: 3em;
+    width: 10em;
+    font-size: 2em;
+}
+
+.roomId {
+    height: 3em;
+    width: 10em;
+    font-size: 2em;
+}
+
+.submit-btn {
+    height: 2em;
+    font-size: 1.2em;
+}

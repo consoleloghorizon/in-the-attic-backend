@@ -6,12 +6,24 @@ export default class Socket{
     }
 
     joinGame(callback) {
-        console.log("Subscribed to player joined game");
         this.socket.on('player joined game', data => {
-            console.log("Got messaged from player joined game");
             callback(data);
         });
     };
+
+    startGame(roomCode) {
+        this.socket.emit('init game', {gameCode: roomCode});
+    }
+
+    gameIsStarting(callback){
+        this.socket.on('start game', data => {
+            callback(data);
+        })
+    }
+
+    sendInfo(info){
+        this.socket.emit('response submission', info);
+    }
 
     subscribeToPhaseChange = (callback) => {
         this.socket.on('phase over', data => {
