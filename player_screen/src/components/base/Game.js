@@ -35,9 +35,13 @@ export class Game extends React.Component {
         this.socket.joinGame(data => {
             this.setState({ isVIP: data.isVIP });
         });
-        this.socket.gameIsStarting(data => {
-            console.log(data);
-            this.setState({ gameIsActive: data.status });
+        this.socket.gameStatusChange(data => {
+            if(data.status) {
+                this.setState({ gameIsActive: true });
+            }
+            else {
+                props.logOut();
+            }
         });
         this.socket.subscribeToPhaseStart(data=> {
             this.setState({ phaseInfo: data.phaseInfo})
