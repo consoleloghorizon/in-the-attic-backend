@@ -60,9 +60,11 @@ io.on('connection', (client) => {
     });
 
     client.on('join game', data => {
+        console.log(data);
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username);
-        io.sockets.in(data.gameCode).emit('player joined game', {isVIP: player.isVIP()});
+        console.log(player);
+        client.emit('player joined game', {isVIP: player.isVIP});
     });
 
     client.on('phase over', data => {

@@ -33,7 +33,7 @@ export class Game extends React.Component {
 
         this.socket = new Sock(props.connectionInfo.userName, props.connectionInfo.roomCode);
         this.socket.joinGame(data => {
-            console.log("Callback listening to player joined, ", data);
+            this.setState({ isVIP: data.isVIP });
         })
         this.state = {
 
@@ -60,7 +60,7 @@ export class Game extends React.Component {
                     choices={VotePhaseState.choices.list}
                 />;
             default:
-                return <GameComponents.MainLobby />;
+                return <GameComponents.MainLobby isVIP={this.state.isVIP} />;
         }
     }
 
