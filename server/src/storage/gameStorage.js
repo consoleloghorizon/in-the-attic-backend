@@ -28,6 +28,7 @@ export class GameStorage {
     }
 
     initPlayerInRoom(roomCode, username) {
+        console.log(roomCode, username);
         return this.gameDictionary[roomCode].initPlayer(username);
     }   
 

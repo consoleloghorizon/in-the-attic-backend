@@ -5,7 +5,6 @@ import { Game } from './components/base/Game';
 class App extends Component {
   state = { connectionInfo: null };
   login(connectionInfo){
-    console.log("CALLED");
     this.setState({ connectionInfo });
   }
   render() {
