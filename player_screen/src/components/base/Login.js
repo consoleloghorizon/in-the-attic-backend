@@ -21,7 +21,6 @@ export class Login extends React.Component {
         this.checkUser(info.userName, info.roomCode)
             .then(answer => {
                 if(answer.status >= 200 && answer.status < 300) {
-                    console.log("I LOGGED IN");
                     this.props.login(info);
                 }
                 else {

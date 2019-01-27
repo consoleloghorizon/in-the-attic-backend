@@ -30,18 +30,16 @@ const VotePhaseState = {
 export class Game extends React.Component {
     constructor(props){
         super(props);
-        console.log("called");
 
+        this.socket = new Sock(props.connectionInfo.userName, props.connectionInfo.roomCode);
+        this.socket.joinGame(data => {
+            console.log("Callback listening to player joined, ", data);
+        })
         this.state = {
-            game: 0,
-            socket: new Sock(props.connectionInfo.userName, props.connectionInfo.roomCode),
+
         }
     }
-
     socketInput(input){
-        console.log(input);
-    }
-    FakeSocket(input){
     }
 
     submitToSocket(input){
@@ -49,17 +47,18 @@ export class Game extends React.Component {
         this.setState({game: 1});
     }
 
-    // submitAnswer(input){
-    //     FakeSocket(input)
-    //         .then(res => )
-    // }
-
     getGameComponent(){
         switch(this.state.game){
             case 0:
-                return <GameComponents.Answer submitFunc={(str) => this.submitToSocket(str)}/>;
+                return <GameComponents.Answer 
+                    submitFunc= {(str) => this.submitToSocket(str)}
+                />;
             case 1:
-                return <GameComponents.Selection submitFunc={(str) => this.submitToSocket(str)} type={VotePhaseState.type} choices={VotePhaseState.choices.list}/>;
+                return <GameComponents.Selection
+                    submitFunc={(str) => this.submitToSocket(str)}
+                    type={VotePhaseState.type}
+                    choices={VotePhaseState.choices.list}
+                />;
             default:
                 return <GameComponents.MainLobby />;
         }
