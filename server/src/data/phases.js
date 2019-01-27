@@ -71,8 +71,7 @@ export class ChoicePhase {
 }
 
 export class VotePhase {
-    constructor(itemsToKeep) {
-        this.itemsToKeep = itemsToKeep;
+    constructor() {
     }
 
     getPhaseInfo(gameRoom) {
@@ -92,9 +91,10 @@ export class VotePhase {
     }
 
     resolvePhase(gameRoom) {
+        const itemsToKeep = Math.ceil(Object.keys(gameRoom.getPlayerList()).length * .75)
         const answerList = gameRoom.getSortedAnswerList();
-        const winningAnswers = _.slice(answerList, 0, this.itemsToKeep);
-        const losingAnswers = _.slice(answerList, this.itemsToKeep);
+        const winningAnswers = _.slice(answerList, 0, itemsToKeep);
+        const losingAnswers = _.slice(answerList, itemsToKeep);
         gameRoom.addLosingAnswers(losingAnswers);
 
         let answer, username;
