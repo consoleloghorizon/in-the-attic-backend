@@ -1,5 +1,5 @@
 import {GameRoom} from "../data/gameRoom";
-import shortid from 'shortid';
+import { generateRoomCode } from "../util/roomCodeGenerator";
 
 export class GameStorage {
     constructor(maxPlayers) {
@@ -8,7 +8,7 @@ export class GameStorage {
     }
 
     initializeGameRoom() {
-        const newId = shortid.generate();
+        const newId = generateRoomCode(4);
         const newRoom = new GameRoom(newId, this.maxPlayers);
         this.gameDictionary[newId] = newRoom;
 
