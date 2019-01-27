@@ -1,8 +1,27 @@
 import React from "react";
 import GameComponents from "../ingame";
+import Sock from "../../sockets/socketManager"
 
-import { subscribeToPhaseChange, sendPhaseOver } from '../../sockets/socketManager';
+const ChoiceState = {
+    type: "ChoicePhase",
+    prompt: {
+        main: "Bathroom",
+        sub: "Shower",
+    },
+    choices: {
+        list: ["plunger", "toilet", "shower head", "shower curtain", "toaster", "rubber ducky"],
+        votes: 1,
+    },
+}
 
+const VotePhaseState = {
+    ...ChoiceState,
+    type: "VotePhase",
+    choices: {
+        list: ["plunger", "toilet", "shower head", "shower curtain", "rubber ducky"],
+        votes: 2,
+    }
+}
 
 /**
  * Father Component of all of the game states. Connect socket to game and change this.state with information received from the server.
@@ -12,56 +31,43 @@ export class Game extends React.Component {
     constructor(props){
         super(props);
 
-        // Connect to socket using props.connectionInfo
-        // Or on component did mount?
-
-        subscribeToPhaseChange((data) => { 
-            
-            console.log("testing this", data);
-            this.setState({
-                responseTest: data,
-                game: 0
-            });
-    });
-
+        this.socket = new Sock(props.connectionInfo.userName, props.connectionInfo.roomCode);
+        this.socket.joinGame(data => {
+            console.log("Callback listening to player joined, ", data);
+        })
         this.state = {
-            game: 0,
+
         }
     }
-
     socketInput(input){
-        console.log(input);
     }
 
     submitToSocket(input){
-        setTimeout(() => {
-            this.socketInput(input);
-            this.setState({ game: 1 });
-        }, 1000);
+        this.FakeSocket(input);
+        this.setState({game: 1});
     }
 
     getGameComponent(){
         switch(this.state.game){
             case 0:
-                return <GameComponents.Answer submitFunc={(str) => this.submitToSocket(str)}/>;
+                return <GameComponents.Answer 
+                    submitFunc= {(str) => this.submitToSocket(str)}
+                />;
             case 1:
-                return <GameComponents.Selection />;
+                return <GameComponents.Selection
+                    submitFunc={(str) => this.submitToSocket(str)}
+                    type={VotePhaseState.type}
+                    choices={VotePhaseState.choices.list}
+                />;
             default:
                 return <GameComponents.MainLobby />;
         }
-    }
-
-    sendPhaseOver(){
-        sendPhaseOver("GY6BNr6oC")
     }
 
     render() {
         return (
             <div>
                 {this.getGameComponent()}
-                <button onClick={this.sendPhaseOver.bind(this)}>
-                    Test Sockets
-                </button>
             </div>
         );
     }

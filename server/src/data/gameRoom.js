@@ -77,7 +77,7 @@ export class GameRoom {
     usernameAvailable(username) {
         let player;
         for (player in this.playerList) {
-            if (player.getUsername() === username) {
+            if (this.playerList[player].getUsername() === username) {
                 return false;
             }
         }

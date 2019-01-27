@@ -1,18 +1,18 @@
 import openSocket from 'socket.io-client';
-import { get } from 'https';
-const socket = openSocket('http://localhost:3000');
+export default class Socket{
+    constructor(username, gamecode){
+        var socket = openSocket('http://localhost:3000');
+        socket.emit('join game', { gameCode: gamecode, username: username });
+    }    
 
-export const subscribeToPhaseChange = (callback) => {
-    socket.on('phase over', data => callback(data));
-};
+    subscribeToPhaseChange = (callback) => {
+        this.socket.on('phase over', data => {
+            console.log('phase game data', data);
+            callback(data);
+        });
+    };
 
-export const sendPhaseOver = (gameCode) => {
-    socket.emit('phase over', { gameCode } );
-};
-
-// export const joinGame = (username, gamecode) => {
-//     fetch(`http://localhost:3000/login/${username}/${gamecode}`, {method: "get"}).then(response => {
-//         console.log('response', response);
-//         socket.emit('join game', { gameCode: gamecode, username: username });
-//     });
-// };
+    sendPhaseOver = () => {
+        this.socket.emit('phase over', "finshed");
+    };
+}

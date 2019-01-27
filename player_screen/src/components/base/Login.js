@@ -1,16 +1,43 @@
 import React from "react";
 
 export class Login extends React.Component {
+    state = {
+        awaitingServer: false,
+        error: null,
+    }
     logInfo = {
         userName: "",
         roomCode: "",
     }
 
+    checkUser(userName, roomCode){
+        return fetch(`http://localhost:3000/login/${userName}/${roomCode}`, {method: "get"})
+    }
+
     async enterRoom (info) {
         // Log in must be performed with server, if successful
         // call this.props.login(<connectionInfo>);
-        // const test = await this.props.socketActions.joinGame(info.userName, info.roomCode);
-        this.props.login(info);
+        this.setState({awaitingServer: true})
+        this.checkUser(info.userName, info.roomCode)
+            .then(answer => {
+                if(answer.status >= 200 && answer.status < 300) {
+                    console.log("I LOGGED IN");
+                    this.props.login(info);
+                }
+                else {
+                    this.setState({
+                        error: JSON.stringify(answer.body),
+                        awaitingServer: false,
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({
+                    error,
+                    awaitingServer: false,
+                })
+            });
     }
 
     render(){
@@ -27,6 +54,7 @@ export class Login extends React.Component {
                 }}>
                     ENTER!
                 </button>
+                {this.state.error ? <p>{this.state.error}</p> : undefined}
             </div>
         );
     }
