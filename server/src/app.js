@@ -76,7 +76,7 @@ io.on('connection', (client) => {
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
         client.emit('player joined game', {isVIP: player.isVIP});
         const host = gameDriver.getRoom(data.gameCode).getHost();
-        io.sockets.to(host).emit('player joined game');
+        io.sockets.to(host).emit('player joined game', {player});
     });
 
     client.on('phase over', data => {
@@ -93,9 +93,10 @@ io.on('connection', (client) => {
         console.log(data);
         try {
             gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer);
-            // client.emit('submission success', { isTrue: true });
+            client.emit('submission success', { isTrue: true });
             const host = gameDriver.getRoom(data.gameCode).getHost();
-            io.sockets.to(host).to(client.id).emit('submission success', {isTrue: true});
+            const player = gameDriver.getPlayerList()[client.id];
+            io.sockets.to(host).emit('submission success', {isTrue: true, Player: player});
 
             // Added for debugging purposes, TAKE OUT
             gameDriver.getRoom(data.gameCode).resolvePhase();
