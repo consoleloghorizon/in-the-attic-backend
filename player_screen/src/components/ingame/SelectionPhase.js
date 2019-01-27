@@ -16,6 +16,7 @@ export default class extends React.Component {
                         <button 
                             disabled={this.state.answered.includes(option)}
                             onClick={() => this.submitAnswer(option)}
+                            className="choice-btn"
                         >
                         {option}
                         </button></p>
@@ -37,12 +38,13 @@ export default class extends React.Component {
                 phaseTitle = "Save it from the dump!";
                 break;
             default:
-                phaseTitle = "Something is wrong Timy!"
+                phaseTitle = "Something is wrong Timmy!"
         }
         return (
             <div>
-                <h1>{phaseTitle}</h1>
+                <h1 className="phase-title">{phaseTitle}</h1>
                 {this.createOptions(this.props.choices)}
+                <div className="spacer"/>
             </div>
         );
     }
