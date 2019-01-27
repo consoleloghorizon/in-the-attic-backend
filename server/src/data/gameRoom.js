@@ -150,7 +150,7 @@ export class GameRoom {
         if (_.isEmpty(this.phaseInfo)) {
             this.phaseInfo = this.rounds.getPhaseInfo(this, playerSocketId);
         }
-        return this.rounds.getPhaseInfo(this);
+        return this.phaseInfo;
     }
 
     resolvePhase() {
