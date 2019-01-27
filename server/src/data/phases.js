@@ -164,3 +164,28 @@ export class ResultsPhase {
         return "OKAY";
     }
 }
+
+export class GarbageChoicePhase {
+    constructor() {
+
+    }
+
+    getPhaseInfo(gameRoom, username) {
+        const garbageAnswers = gameRoom.getLosingAnswers();
+        const choices = garbageAnswers.map(answer => answer.text);
+
+        return {
+            type: "choice",
+            list: choices,
+            votes: 1
+        };
+    }
+
+    acceptAnswer(gameRoom, username, answer) {
+        gameRoom.addAnswerToList(username, answer);
+    }
+
+    resolvePhase(gameRoom) {
+        return "OKAY";
+    }
+}
