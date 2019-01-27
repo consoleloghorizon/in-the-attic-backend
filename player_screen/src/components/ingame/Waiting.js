@@ -4,14 +4,17 @@ export default class Wait extends React.Component {
     render () {
         if (this.props.isVIP) {
             if (this.props.end) {
-                return (<div>
-                    <button onClick={() => this.props.playAgain()}>Play again with the same players!</button>
-                    <button onClick={() => this.props.endServer()}>Disband army of movers</button>
-                </div>);
+                return (
+                <div className="waiting-vip-end">
+                    <button className="vip-options" onClick={() => this.props.playAgain()}>Play again with the same players!</button>
+                    <button className="vip-options" onClick={() => this.props.endServer()}>Disband army of movers</button>
+                    <div className="spacer"/>
+                </div>
+                );
             }
         }
         return (
-            <p>Waiting on the next round!</p>           
+            <p className="waiting-next"><h2>Waiting on the next round!</h2></p>           
         );
     }
 }

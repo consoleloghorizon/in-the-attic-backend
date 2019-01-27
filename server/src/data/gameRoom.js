@@ -146,9 +146,9 @@ export class GameRoom {
         this.phaseInfo = {};
     }
 
-    getPhaseInfo() {
+    getPhaseInfo(playerSocketId) {
         if (_.isEmpty(this.phaseInfo)) {
-            this.phaseInfo = this.rounds.getPhaseInfo(this);
+            this.phaseInfo = this.rounds.getPhaseInfo(this, playerSocketId);
         }
         return this.rounds.getPhaseInfo(this);
     }
