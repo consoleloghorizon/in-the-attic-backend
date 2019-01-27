@@ -16,22 +16,27 @@ export class GameStorage {
     }
 
     gameRoomExists(roomCode) {
-        return this.gameDictionary.hasOwnProperty(roomCode);
+        const parsedCode = _.toUpper(roomCode);
+        return this.gameDictionary.hasOwnProperty(parsedCode);
     }
 
     usernameAvailable(roomCode, username) {
-        return this.gameDictionary[roomCode].usernameAvailable(username);
+        const parsedCode = _.toUpper(roomCode);
+        return this.gameDictionary[parsedCode].usernameAvailable(username);
     }
 
     spaceAvailable(roomCode) {
-        return this.gameDictionary[roomCode].spaceAvailable();
+        const parsedCode = _.toUpper(roomCode);
+        return this.gameDictionary[parsedCode].spaceAvailable();
     }
 
     initPlayerInRoom(roomCode, username, socketId) {
-        return this.gameDictionary[roomCode].initPlayer(username, socketId);
+        const parsedCode = _.toUpper(roomCode);
+        return this.gameDictionary[parsedCode].initPlayer(username, socketId);
     }   
 
     getRoom(roomCode) {
-        return this.gameDictionary[roomCode];
+        const parsedCode = _.toUpper(roomCode);
+        return this.gameDictionary[parsedCode];
     }
 }
