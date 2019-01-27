@@ -84,7 +84,7 @@ io.on('connection', (client) => {
     });
 
     client.on('response submission', data => {
-        gameDriver.getRoom(data.gameCode).acceptAnswer(data.username, data.answer)
+        gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer)
         io.sockets.in(data.gameCode).emit('submission recieved');
     })
 
