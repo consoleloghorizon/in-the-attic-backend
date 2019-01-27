@@ -28,6 +28,10 @@ export class GameRoom {
         return this.usedPrompts;
     }
 
+    getLosingAnswers() {
+        return this.losingAnswers;
+    }
+
     addUsedPrompts(prompt) {
         this.usedPrompts.push(prompt);
     }
@@ -70,7 +74,9 @@ export class GameRoom {
     addLosingAnswers(losingAnswers) {
         let i = 0;
         for(i = 0; i < losingAnswers.length; i++) {
-            this.losingAnswers[losingAnswers[i].text] = losingAnswers[i];
+            this.losingAnswers[losingAnswers[i].text] = {
+                text: losingAnswers[i]
+            };
         }
     }
 
