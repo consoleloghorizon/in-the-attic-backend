@@ -8,11 +8,12 @@ class App extends Component {
   login(connectionInfo){
     this.setState({ connectionInfo });
   }
+  logout(){this.setState({connectionInfo: null})};
   render() {
     return (
       <div className="App">
         {this.state.connectionInfo ? 
-          <Game connectionInfo={this.state.connectionInfo} />
+          <Game connectionInfo={this.state.connectionInfo} logOut={() => this.logout()} />
           :
           <Login login={(connectionInfo) => this.login(connectionInfo)} />
         }

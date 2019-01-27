@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles.css";
+import axios from "axios";
 
 export class Login extends React.Component {
     state = {
@@ -21,20 +22,21 @@ export class Login extends React.Component {
         this.setState({awaitingServer: true})
         this.checkUser(info.userName, info.roomCode)
             .then(answer => {
+                console.log(answer);
                 if(answer.status >= 200 && answer.status < 300) {
                     this.props.login(info);
                 }
                 else {
                     this.setState({
-                        error: JSON.stringify(answer.body),
+                        error: answer.response.data.status,
                         awaitingServer: false,
                     })
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response);
                 this.setState({
-                    error,
+                    error: error.response.data.status,
                     awaitingServer: false,
                 })
             });
