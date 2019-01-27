@@ -10,6 +10,7 @@ export default class extends React.Component {
                 :
                 <h2 className="waiting-prompt">Waiting for the VIP to start the game....</h2>
                 }
+                <div className="spacer"/>
             </div>
         );
     }

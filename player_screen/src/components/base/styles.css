@@ -48,7 +48,6 @@
 .start-btn {
     height: 2em;
     font-size: 1.2em;
-    padding-bottom: 40em;
     margin-top: 3em;
 }
 
@@ -59,13 +58,11 @@
 }
 
 .waiting-prompt {
-    padding-bottom: 40em;
     margin: 1em;
 }
 
 .waiting-next {
     margin-top: 15em;
-    padding-bottom: 40em;
 }
 
 .waiting-vip-end {

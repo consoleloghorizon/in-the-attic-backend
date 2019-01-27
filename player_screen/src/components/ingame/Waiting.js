@@ -14,7 +14,10 @@ export default class Wait extends React.Component {
             }
         }
         return (
-            <p className="waiting-next"><h2>Waiting on the next round!</h2></p>           
+            <div>
+                <p className="waiting-next"><h2>Waiting on the next round!</h2></p>      
+                <div className="spacer"/>
+            </div>     
         );
     }
 }
