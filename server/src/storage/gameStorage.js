@@ -30,4 +30,8 @@ export class GameStorage {
     initPlayerInRoom(roomCode, username) {
         return this.gameDictionary[roomCode].initPlayer(username);
     }   
+
+    getRoom(roomCode) {
+        return this.gameDictionary[roomCode];
+    }
 }
