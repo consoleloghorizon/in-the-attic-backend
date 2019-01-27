@@ -36,11 +36,14 @@ export class Game extends React.Component {
             this.setState({ isVIP: data.isVIP });
         });
         this.socket.gameIsStarting(data => {
+            console.log(data);
             this.setState({ gameIsActive: data.status });
         });
         this.socket.subscribeToPhaseStart(data=> {
-            console.log(data);
             this.setState({ phaseInfo: data.phaseInfo})
+        });
+        this.socket.subscribeToPhaseOver(() => {
+            this.setState({ phaseInfo: null, submissionAccepted: false, error: null });
         });
         this.state = {
             isVIP: false,
@@ -77,6 +80,7 @@ export class Game extends React.Component {
                 <GameComponents.Wait
                     isVIP={this.state.isVIP}
                     gameEnded={this.state.gameEnded}
+                    submissionAccepted={this.state.submissionAccepted}
                     playAgain={() => console.log("VIP says play again,", this.props.connectionInfo.roomCode)}
                     endServer={() => console.log("VIP says disband", this.props.connectionInfo.roomCode)}
                 />
@@ -93,6 +97,7 @@ export class Game extends React.Component {
         return (<GameComponents.Selection
             submitFunc= {(str) => this.sendInfo(str)}
             error={this.state.error}
+            voteNum={this.state.phaseInfo.votes}
             type={this.state.phaseInfo.type}
             choices={this.state.phaseInfo.list}
         />);

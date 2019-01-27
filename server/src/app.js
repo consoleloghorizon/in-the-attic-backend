@@ -58,6 +58,7 @@ io.on('connection', (client) => {
         io.sockets.emit('start game', {status: true});
             
         // Added for debugging purposes, TAKE OUT
+        // If not game will start on VIP's startgame function
         gameDriver.getRoom(data.gameCode).startPhase();
         const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
         gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
@@ -91,16 +92,6 @@ io.on('connection', (client) => {
         try {
             gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer);
             client.emit('submission success', { isTrue: true });
-
-            // Added for debugging purposes, TAKE OUT
-            gameDriver.getRoom(data.gameCode).resolvePhase();
-            gameDriver.getRoom(data.gameCode).startPhase();
-            const print = gameDriver.getRoom(data.gameCode).getPhaseInfo();
-            let innnnnfo = print;
-            innnnnfo.list = [ "first", "second", "third", "fourth" ];
-            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo(client.id);
-            gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: innnnnfo });
         } catch (error) {
             client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
         }
