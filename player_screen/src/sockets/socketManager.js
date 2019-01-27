@@ -1,7 +1,7 @@
 import openSocket from 'socket.io-client';
 export default class Socket{
     constructor(username, gamecode){
-        this.socket = openSocket('http://localhost:3000');
+        this.socket = openSocket('http://3.92.201.176:3000');
         this.socket.emit('join game', { gameCode: gamecode, username: username});
     }
 
