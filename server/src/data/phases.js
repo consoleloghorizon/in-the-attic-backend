@@ -62,7 +62,12 @@ export class ChoicePhase {
     }
 
     acceptAnswer(gameRoom, playerSocketId, answer) {
-        gameRoom.chooseAnswerFromList(playerSocketId, answer);
+        if (_.isArray(answer)) {
+            gameRoom.chooseAnswerFromList(playerSocketId, answer[0]);
+        }
+        else if(_.isString(answer)) {
+            gameRoom.chooseAnswerFromList(playerSocketId, answer);
+        }
     }
 
     resolvePhase(gameRoom) {
@@ -85,7 +90,15 @@ export class VotePhase {
     }
 
     acceptAnswer(gameRoom, playerSocketId, answer) {
-        gameRoom.voteForAnswer(answer);
+        if(_.isArray(answer) && answer.length <= 3) {
+            let vote = '';
+            for (vote in answer) {
+                gameRoom.voteForAnswer(vote);
+            }
+        }
+        else {
+            throw "Too many votes cast";
+        }
     }
 
     resolvePhase(gameRoom) {
@@ -182,7 +195,12 @@ export class GarbageChoicePhase {
     }
 
     acceptAnswer(gameRoom, playerSocketId, answer) {
-        gameRoom.addAnswerToList(playerSocketId, answer);
+        if (_.isArray(answer)) {
+            gameRoom.chooseAnswerFromList(playerSocketId, answer[0]);
+        }
+        else if(_.isString(answer)) {
+            gameRoom.chooseAnswerFromList(playerSocketId, answer);
+        }
     }
 
     resolvePhase(gameRoom) {

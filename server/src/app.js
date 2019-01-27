@@ -66,6 +66,7 @@ io.on('connection', (client) => {
     });
 
     client.on('add host', data => {
+        gameDriver.getRoom(data.gameCode).setHost(client.id);
         client.join(data.gameCode);
     });
 
@@ -75,6 +76,8 @@ io.on('connection', (client) => {
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
         client.emit('player joined game', {isVIP: player.isVIP});
+        const host = gameDriver.getRoom(data.gameCode).getHost();
+        io.sockets.to(host).emit('player joined game', {player});
     });
 
     client.on('phase over', data => {
@@ -92,6 +95,19 @@ io.on('connection', (client) => {
         try {
             gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer);
             client.emit('submission success', { isTrue: true });
+<<<<<<< HEAD
+=======
+            const host = gameDriver.getRoom(data.gameCode).getHost();
+            const player = gameDriver.getPlayerList()[client.id];
+            io.sockets.to(host).emit('submission success', {isTrue: true, Player: player});
+
+            // Added for debugging purposes, TAKE OUT
+            gameDriver.getRoom(data.gameCode).resolvePhase();
+            gameDriver.getRoom(data.gameCode).startPhase();
+            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+            gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+>>>>>>> 9d05b85f165e5244c2fb66d5aae962dd4d66bfb0
         } catch (error) {
             client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
         }
