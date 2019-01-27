@@ -36,7 +36,7 @@ export class Game extends React.Component {
             this.setState({ isVIP: data.isVIP });
         })
         this.state = {
-
+            isVIP: false,
         }
     }
     socketInput(input){

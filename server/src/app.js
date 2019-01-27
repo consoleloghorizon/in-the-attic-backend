@@ -60,16 +60,12 @@ io.on('connection', (client) => {
     });
 
     client.on('join game', data => {
-        console.log(data);
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username);
-        console.log(player);
         client.emit('player joined game', {isVIP: player.isVIP});
     });
 
     client.on('phase over', data => {
-        console.log("I have been reached");
-        console.log("data", data.gameCode);
         io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
         io.sockets.emit('phase over', "new phase coming soon");
     });
