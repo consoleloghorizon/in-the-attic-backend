@@ -4,6 +4,7 @@
   "description": "Server for In The Attic",
   "main": "index.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "shortid": "^2.2.14",

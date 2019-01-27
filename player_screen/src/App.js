@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { Login } from "./components/base/Login";
 import { Game } from './components/base/Game';
-import io from 'socket.io-client';
 
 class App extends Component {
+  state = { connectionInfo: null };
   login(connectionInfo){
+    console.log("CALLED");
     this.setState({ connectionInfo });
   }
   render() {
     return (
       <div className="App">
-        {this.state ? 
-          <Game connectionInfo={this.connectionInfo}/>
+        {this.state.connectionInfo ? 
+          <Game connectionInfo={this.state.connectionInfo} />
           :
-          <Login login={(connectionInfo) => this.login(connectionInfo)}/>
+          <Login login={(connectionInfo) => this.login(connectionInfo)} />
         }
       </div>
     );
