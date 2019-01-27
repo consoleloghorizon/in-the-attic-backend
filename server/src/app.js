@@ -57,12 +57,12 @@ io.on('connection', (client) => {
         gameDriver.getRoom(data.gameCode).startGame();
         io.sockets.emit('start game', {status: true});
             
-        // Added for debugging purposes, TAKE OUT
-        // If not game will start on VIP's startgame function
-        gameDriver.getRoom(data.gameCode).startPhase();
-        const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
-        gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-        io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+        // // Added for debugging purposes, TAKE OUT
+        // // If not game will start on VIP's startgame function
+        // gameDriver.getRoom(data.gameCode).startPhase();
+        // const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+        // gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+        // io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
     });
 
     client.on('add host', data => {
@@ -81,6 +81,8 @@ io.on('connection', (client) => {
     });
 
     client.on('phase over', data => {
+        gameDriver.getRoom(data.gameCode).stopAcceptingAnswers();
+        gameDriver.getRoom(data.gameCode).resolvePhase();
         io.sockets.to(data.gameCode).emit('phase over', "new phase coming soon");
     });
 
@@ -101,14 +103,14 @@ io.on('connection', (client) => {
             client.emit('submission success', { isTrue: true });
             const host = gameDriver.getRoom(data.gameCode).getHost();
             const player = gameDriver.getPlayerList()[client.id];
-            io.sockets.to(host).emit('submission success', {isTrue: true, Player: player});
+            io.sockets.to(host).emit('submission success', {isTrue: true, player});
 
-            // Added for debugging purposes, TAKE OUT
-            gameDriver.getRoom(data.gameCode).resolvePhase();
-            gameDriver.getRoom(data.gameCode).startPhase();
-            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
-            gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+            // // Added for debugging purposes, TAKE OUT
+            // gameDriver.getRoom(data.gameCode).resolvePhase();
+            // gameDriver.getRoom(data.gameCode).startPhase();
+            // const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+            // gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+            // io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
         } catch (error) {
             client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
         }
