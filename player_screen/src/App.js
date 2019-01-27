@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Login } from "./components/base/Login";
 import { Game } from './components/base/Game';
+import './styles.css'
 
 class App extends Component {
   state = { connectionInfo: null };
