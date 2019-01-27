@@ -1,5 +1,6 @@
 import {GameRoom} from "../data/gameRoom";
 import { generateRoomCode } from "../util/roomCodeGenerator";
+import * as _ from "lodash";
 
 export class GameStorage {
     constructor(maxPlayers) {

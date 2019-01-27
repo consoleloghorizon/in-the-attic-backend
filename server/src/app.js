@@ -95,9 +95,12 @@ io.on('connection', (client) => {
             // Added for debugging purposes, TAKE OUT
             gameDriver.getRoom(data.gameCode).resolvePhase();
             gameDriver.getRoom(data.gameCode).startPhase();
-            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+            const print = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+            let innnnnfo = print;
+            innnnnfo.list = [ "first", "second", "third", "fourth" ];
+            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo(client.id);
             gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
-            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: innnnnfo });
         } catch (error) {
             client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
         }
