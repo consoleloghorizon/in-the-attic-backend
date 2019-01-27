@@ -38,12 +38,27 @@ export class Game extends React.Component {
         this.socket.gameIsStarting(data => {
             this.setState({ gameIsActive: data.status });
         });
+        this.socket.subscribeToPhaseStart(data=> {
+            console.log(data);
+            this.setState({ phaseInfo: data.phaseInfo})
+        });
         this.state = {
             isVIP: false,
             gameIsActive: false,
             gameEnded: false,
             phaseInfo: null,
+            error: null,
         }
+    }
+
+    sendInfo(ans){
+        this.socket.sendInfo(
+            {gameCode: this.props.connectionInfo.roomCode, answer: ans},
+            data => {
+                if(data.isTrue) this.setState({phaseInfo: null, error: null});
+                else this.setState({error: data.error})
+            }
+        )
     }
 
     getGameComponent(){
@@ -60,20 +75,24 @@ export class Game extends React.Component {
                 <GameComponents.Wait
                     isVIP={this.state.isVIP}
                     gameEnded={this.state.gameEnded}
-                    playAgain={() => console.log("VIP says play again,", this.state.roomCode)}
-                    endServer={() => console.log("VIP says disband", this.state.roomCode)}
+                    playAgain={() => console.log("VIP says play again,", this.props.connectionInfo.roomCode)}
+                    endServer={() => console.log("VIP says disband", this.props.connectionInfo.roomCode)}
                 />
             );
         }
         if (this.state.phaseInfo.type === "answer") {
-            return (<GameComponents.Answer 
-                submitFunc= {(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
+            return (<GameComponents.Answer
+                error={this.state.error}
+                phaseInfo={this.state.phaseInfo}
+                submitFunc= {(str) => this.sendInfo(str)}
             />);
         }
+        // votes: # of votes available on phase
         return (<GameComponents.Selection
-            submitFunc={(str) => this.socket.sendInfo({gameCode: this.props.roomCode, answer: str})}
-            type={VotePhaseState.type}
-            choices={VotePhaseState.choices.list}
+            submitFunc= {(str) => this.sendInfo(str)}
+            error={this.state.error}
+            type={this.state.phaseInfo.type}
+            choices={this.state.phaseInfo.list}
         />);
     }
 

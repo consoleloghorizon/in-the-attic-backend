@@ -8,12 +8,14 @@ export default class extends React.Component {
     }
 
     render() {
-        const { prompt, subpromt } = this.props;
+        const { main, sub } = this.props.phaseInfo;
+        const { error } = this.props;
         return (
             <div>
-                <h1>Save one thing from the {prompt}! ({subpromt})</h1>
+                <h1>Save one thing from the {main}! ({sub})</h1>
                 <input onChange={(e) => this.answer = e.target.value} />
                 <button onClick={() => this.submitAnswer()}>Save it!</button>
+                { error ? <p>{error}</p> : undefined }
             </div>
         );
     }

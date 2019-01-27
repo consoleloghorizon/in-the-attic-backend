@@ -55,18 +55,24 @@ io.on('connection', (client) => {
 
     client.on('init game', data => {
         gameDriver.getRoom(data.gameCode).startGame();
-        io.sockets.emit('start game', {status: true})
+        io.sockets.emit('start game', {status: true});
+            
+        // Added for debugging purposes, TAKE OUT
+        gameDriver.getRoom(data.gameCode).startPhase();
+        const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+        gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+        io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
     });
 
     client.on('add host', data => {
         client.join(data.gameCode);
     });
 
+    // Needs to be updated to allow to players to reconnect to game
+    // and things about active game connects needs to be talked about
     client.on('join game', data => {
         client.join(data.gameCode);
         const player = gameDriver.initPlayerInRoom(data.gameCode, data.username, client.id);
-        console.log(client.id);
-        console.log(player);
         client.emit('player joined game', {isVIP: player.isVIP});
     });
 
@@ -81,8 +87,20 @@ io.on('connection', (client) => {
     });
 
     client.on('response submission', data => {
-        gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer)
-        io.sockets.in(data.gameCode).emit('submission recieved');
+        console.log(data);
+        try {
+            gameDriver.getRoom(data.gameCode).acceptAnswer(client.id, data.answer);
+            client.emit('submission success', { isTrue: true });
+
+            // Added for debugging purposes, TAKE OUT
+            gameDriver.getRoom(data.gameCode).resolvePhase();
+            gameDriver.getRoom(data.gameCode).startPhase();
+            const phaseInfo = gameDriver.getRoom(data.gameCode).getPhaseInfo();
+            gameDriver.getRoom(data.gameCode).startAcceptingAnswers();
+            io.sockets.in(data.gameCode).emit('start phase', { phaseInfo: phaseInfo });
+        } catch (error) {
+            client.emit('submission success', { isTrue: false, error: "Something went wrong, submit again" });
+        }
     })
 
     client.on('disconnect', () => {
