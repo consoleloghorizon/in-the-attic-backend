@@ -5,3 +5,29 @@
     justify-content: center;
     background-color: rgb(30, 180, 240);
 }
+
+.answer-phase {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.answer-input {
+    width: 80%;
+    height: 3em;
+    font-size: 2em;
+}
+
+.answer-input-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2em;
+    margin-top: 6em;
+}
+
+.submit-btn {
+    height: 2em;
+    font-size: 1.2em;
+    padding-bottom: 40em;
+}

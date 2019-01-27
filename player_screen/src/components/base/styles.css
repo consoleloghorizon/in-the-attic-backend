@@ -44,3 +44,51 @@
     height: 2em;
     font-size: 1.2em;
 }
+
+.start-btn {
+    height: 2em;
+    font-size: 1.2em;
+    padding-bottom: 40em;
+    margin-top: 3em;
+}
+
+.main-lobby {
+    display: flex;
+    justify-content: center;
+    flex-direction: column
+}
+
+.waiting-prompt {
+    padding-bottom: 40em;
+    margin: 1em;
+}
+
+.waiting-next {
+    margin-top: 15em;
+    padding-bottom: 40em;
+}
+
+.waiting-vip-end {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.vip-options {
+    height: 2em;
+    font-size: 1.2em;
+    margin-top: 10em;
+}
+
+.spacer {
+    padding-bottom: 40em;
+}
+
+.phase-title {
+    margin: 1em;
+}
+
+.choice-btn {
+    height: 2em;
+    font-size: 1.2em;
+}
