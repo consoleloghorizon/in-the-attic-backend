@@ -1,4 +1,4 @@
-import { AnswerPhase, ChoicePhase, VotePhase, ScorePhase, ResultsPhase } from "../data/phases";
+import { AnswerPhase, ChoicePhase, VotePhase, ScorePhase, ResultsPhase, GarbageChoicePhase } from "../data/phases";
 
 export class RoundStorage {
     constructor() {
@@ -10,8 +10,7 @@ export class RoundStorage {
                 phases: [new AnswerPhase(), new ChoicePhase(), new VotePhase(), new ScorePhase()]
             },
             {
-                //Note: We need to make a GarbageChoice and GarbageVote phase, since they behave differently
-                phases: [new ChoicePhase(), new VotePhase(), new ResultsPhase()]
+                phases: [new GarbageChoicePhase(), new VotePhase(), new ResultsPhase()]
             }
         ];
         this.currentRound = 0;
