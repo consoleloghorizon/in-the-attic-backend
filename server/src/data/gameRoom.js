@@ -104,8 +104,8 @@ export class GameRoom {
         Oh, and the getters at the top of the file are fine to use. 
     */
 
-    initPlayer(username) {
-        const newPlayer = new Player(username, Object.keys(this.playerList).length === 0);
+    initPlayer(username, socketId) {
+        const newPlayer = new Player(username, socketId, Object.keys(this.playerList).length === 0);
         this.playerList[username] = newPlayer;
         return newPlayer;
     }
