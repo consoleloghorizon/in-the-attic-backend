@@ -12,7 +12,7 @@ export class Login extends React.Component {
     }
 
     checkUser(userName, roomCode){
-        return fetch(`http://localhost:3000/login/${userName}/${roomCode}`, {method: "get"})
+        return fetch(`http://3.92.201.176:3000/login/${userName}/${roomCode}`, {method: "get"})
     }
 
     async enterRoom (info) {
