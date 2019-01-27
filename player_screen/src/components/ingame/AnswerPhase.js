@@ -10,10 +10,12 @@ export default class extends React.Component {
     render() {
         const { prompt, subpromt } = this.props;
         return (
-            <div>
+            <div className="answer-phase">
                 <h1>Save one thing from the {prompt}! ({subpromt})</h1>
-                <input onChange={(e) => this.answer = e.target.value} />
-                <button onClick={() => this.submitAnswer()}>Save it!</button>
+                <div className="answer-input-container">
+                    <input className="answer-input" onChange={(e) => this.answer = e.target.value} />
+                </div>
+                <button className="submit-btn" onClick={() => this.submitAnswer()}>Save it!</button>
             </div>
         );
     }
