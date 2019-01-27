@@ -16,6 +16,7 @@ export default class extends React.Component {
                     <input className="answer-input" onChange={(e) => this.answer = e.target.value} />
                 </div>
                 <button className="submit-btn" onClick={() => this.submitAnswer()}>Save it!</button>
+                <div className="spacer"/>
             </div>
         );
     }
